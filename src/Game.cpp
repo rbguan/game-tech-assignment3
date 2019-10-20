@@ -48,10 +48,10 @@ void Game::_ready()
 
 void Game::_on_player_disconnected(int64_t id)
 {
-    if(get_node(String(id)))
-    {
-        get_node(String(id))->queue_free();
-    }
+//    if(get_node(String(id)))
+//    {
+//        get_node(String(id))->queue_free();
+//    }
 }
 
 void Game::_on_server_disconnected(int64_t id)

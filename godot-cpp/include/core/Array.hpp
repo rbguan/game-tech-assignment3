@@ -3,10 +3,45 @@
 
 #include <gdnative/array.h>
 
-#include "Defs.hpp"
 #include "String.hpp"
 
 namespace godot {
+
+namespace helpers {
+template <typename T, typename ValueT>
+T append_all(T appendable, ValueT value) {
+	appendable.append(value);
+	return appendable;
+}
+
+template <typename T, typename ValueT, typename... Args>
+T append_all(T appendable, ValueT value, Args... args) {
+	appendable.append(value);
+	return append_all(appendable, args...);
+}
+
+template <typename T>
+T append_all(T appendable) {
+	return appendable;
+}
+
+template <typename KV, typename KeyT, typename ValueT>
+KV add_all(KV kv, KeyT key, ValueT value) {
+	kv[key] = value;
+	return kv;
+}
+
+template <typename KV, typename KeyT, typename ValueT, typename... Args>
+KV add_all(KV kv, KeyT key, ValueT value, Args... args) {
+	kv[key] = value;
+	return add_all(kv, args...);
+}
+
+template <typename KV>
+KV add_all(KV kv) {
+	return kv;
+}
+} // namespace helpers
 
 class Variant;
 class PoolByteArray;
@@ -97,6 +132,19 @@ public:
 	void sort();
 
 	void sort_custom(Object *obj, const String &func);
+
+	int bsearch(const Variant &value, const bool before = true);
+
+	int bsearch_custom(const Variant &value, const Object *obj,
+			const String &func, const bool before = true);
+
+	Array duplicate(const bool deep = false) const;
+
+	Variant max() const;
+
+	Variant min() const;
+
+	void shuffle();
 
 	~Array();
 };

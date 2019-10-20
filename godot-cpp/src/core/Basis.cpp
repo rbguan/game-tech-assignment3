@@ -31,15 +31,6 @@ Basis::Basis() {
 	elements[2][2] = 1;
 }
 
-const Vector3 &Basis::operator[](int axis) const {
-
-	return elements[axis];
-}
-Vector3 &Basis::operator[](int axis) {
-
-	return elements[axis];
-}
-
 #define cofac(row1, col1, row2, col2) \
 	(elements[row1][col1] * elements[row2][col2] - elements[row1][col2] * elements[row2][col1])
 
@@ -156,6 +147,15 @@ Vector3 Basis::get_scale() const {
 							  Vector3(elements[0][0], elements[1][0], elements[2][0]).length(),
 							  Vector3(elements[0][1], elements[1][1], elements[2][1]).length(),
 							  Vector3(elements[0][2], elements[1][2], elements[2][2]).length());
+}
+
+// TODO: implement this directly without using quaternions to make it more efficient
+Basis Basis::slerp(Basis b, float t) const {
+	ERR_FAIL_COND_V(!is_rotation(), Basis());
+	ERR_FAIL_COND_V(!b.is_rotation(), Basis());
+	Quat from(*this);
+	Quat to(b);
+	return Basis(from.slerp(to, t));
 }
 
 // get_euler_xyz returns a vector containing the Euler angles in the format
